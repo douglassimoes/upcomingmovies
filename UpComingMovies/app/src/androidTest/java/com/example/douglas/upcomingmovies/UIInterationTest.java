@@ -29,7 +29,11 @@ import static org.hamcrest.Matchers.allOf;
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class UIInterationTest {
-
+    /**
+     * This test was created with espresso. It tests a normal use of the application, scrooling and
+     * clicking around the application. It verifies the existance of the fundamental views for the
+     * first official release of the application.
+     */
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 

@@ -22,6 +22,13 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
     private List<Movie> mMovieData;
     private OnBottomReachedListener onBottomReachedListener;
 
+    /**
+     * This MovieServiceHolder contains the reference for the view object. This component connects
+     * the recycler view to its position.
+     * @param viewGroup
+     * @param viewType
+     * @return
+     */
     @Override
     public MovieServiceAdapter.MovieServiceViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
@@ -33,6 +40,13 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
         return new MovieServiceViewHolder(view);
     }
 
+    /**
+     * The BindViewHolder makes the application capable of detect when the user reached the bottom
+     * of it. It is very important to have the link between the view and its repesctive position
+     * on the screen too.
+     * @param movieViewHolder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(MovieServiceAdapter.MovieServiceViewHolder movieViewHolder, int position) {
         Movie dataForThisMovie = mMovieData.get(position);
@@ -49,6 +63,11 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
         return mMovieData.size();
     }
 
+    /**
+     * This is the initialization of MovieServiceViewHolder. It gets the
+     * context of the respective view that is being created and set listeners for handling it's
+     * clicks that could be useful for future releases too.
+     */
     public class MovieServiceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public int position;
         private Context context;
@@ -65,6 +84,11 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
 
         }
 
+        /**
+         * This method pass the sensitive parameters to the Intents and it is responsible for start
+         * them too.
+         * @param v
+         */
         @Override
         public void onClick(View v) {
             Movie movie = mMovieData.get(this.getAdapterPosition());
@@ -83,6 +107,10 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
         notifyDataSetChanged();
     }
 
+    /**
+     * This interface gives us the pattern for the functionality that we need to get aware of
+     * the bottom region of the app.
+     */
     public interface OnBottomReachedListener {
 
         void onBottomReached(int position);

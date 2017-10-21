@@ -1,17 +1,17 @@
 package com.example.douglas.upcomingmovies.model;
 
-import android.graphics.Bitmap;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 
 import org.json.JSONArray;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Douglas on 21/10/2017.
  */
 
+/**
+ * This is the class that brings meaning or context to the application. This class is responsible
+ * to represent a Movie and all its information.
+ */
 public class Movie {
     private long id;
     private String title;
@@ -57,6 +57,11 @@ public class Movie {
         return posterPath;
     }
 
+    /**
+     * This method gives to development a fast way to get Movies information description. It makes
+     * the first release of the application more simple.
+     * @return
+     */
     @Override
     public String toString() {
         String movieInfoRepresentation = "";
@@ -67,6 +72,10 @@ public class Movie {
         return movieInfoRepresentation;
     }
 
+    /**
+     * This method returns to the Intent the Movie's full description.
+     * @return
+     */
     public String getFullDescrition() {
         String movieInfoRepresentation = "";
         String title="Name:\n"+getTitle()+"\n";
@@ -94,6 +103,11 @@ public class Movie {
         return strArray;
     }
 
+    /**
+     * This method binds the genre identifiers with the genre text representation.
+     * @param genreIds
+     * @return
+     */
     private String getGenreString(JSONArray genreIds) {
         String[] genreIdsArray = toStringArray(genreIds);
         if(genreIds.length() == 0){

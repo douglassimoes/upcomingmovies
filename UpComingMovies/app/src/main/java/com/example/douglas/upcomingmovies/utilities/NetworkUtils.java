@@ -17,6 +17,10 @@ import java.net.URL;
  * Created by Douglas on 21/10/2017.
  */
 
+/**
+ * This class is a module for our application meaning that isolates network functions from the rest
+ * of the application.
+ */
 public class NetworkUtils {
     final static String UP_COMMING_MOVIES_BASE_URL = "https://api.themoviedb.org/3/movie/upcoming";
     final static String MOVIES_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185/";
@@ -26,6 +30,12 @@ public class NetworkUtils {
     final static String PARAM_LANGUAGE = "language";
     final static String PARAM_PAGE = "page";
 
+    /**
+     * This method takes care of the url build. It parses the uri and uses an Uri.Builder to build
+     * correct easier and with perfect format.
+     * @param pageNumber
+     * @return
+     */
     public static URL buildUrl(String pageNumber){
         Uri builtUri = Uri.parse(UP_COMMING_MOVIES_BASE_URL).buildUpon()
                 .appendQueryParameter(PARAM_API_KEY, API_KEY)
@@ -43,6 +53,12 @@ public class NetworkUtils {
         return url;
     }
 
+    /**
+     * This method build urls, but it is different from the buildUrl, because the Uri building
+     * pattern to get images is different.
+     * @param posterPath
+     * @return
+     */
     public static URL buildImgUrl(String posterPath) {
         Uri builtUri = Uri.parse(MOVIES_IMAGE_BASE_URL+posterPath);
 
@@ -56,6 +72,12 @@ public class NetworkUtils {
         return url;
     }
 
+    /**
+     * This method handles urlConnections and its main reason is to return the api's response to the
+     * Activies.
+     * @param moviesUrl
+     * @return
+     */
     public static String getResponseFromHttpUrl(URL moviesUrl){
         HttpURLConnection urlConnection = null;
         String result=null;
@@ -85,6 +107,11 @@ public class NetworkUtils {
         return null;
     }
 
+    /**
+     * This method handle urlConnections and it decodes images using BitmapFactory.
+     * @param moviesUrl
+     * @return
+     */
     public static Bitmap getImageResponseFromHttpUrl(URL moviesUrl){
         HttpURLConnection urlConnection = null;
         String result=null;

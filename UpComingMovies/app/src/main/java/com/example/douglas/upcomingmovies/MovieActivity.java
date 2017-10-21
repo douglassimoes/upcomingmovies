@@ -5,15 +5,11 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
-import android.util.Log;
 import android.widget.TextView;
 
-import com.example.douglas.upcomingmovies.model.Movie;
 import com.example.douglas.upcomingmovies.utilities.NetworkUtils;
 
 import java.io.InputStream;
@@ -24,6 +20,12 @@ public class MovieActivity extends AppCompatActivity {
     private TextView mMovieMessageDisplay;
     private AppCompatImageView mMovieServiceImageView;
 
+    /**
+     * This activity is started by an Intent when the user click on any view. The MainActivity
+     * passes two parameters for this activity: the movie full description and the poster path
+     * image.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,14 +42,22 @@ public class MovieActivity extends AppCompatActivity {
             String textEntered = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
             mMovieMessageDisplay.setText(textEntered);
         }
+        /**
+         * It was passed the movie poster URI through an Intent parameter called imageUri. With
+         * that parameter, we can then get the poster using an AsyncTask.
+         */
         if (intentThatStartedThisActivity.hasExtra("imageUri")){
-            String imagePosterUrl = intentThatStartedThisActivity.getStringExtra("imageUri");
+            String imagePosterURI = intentThatStartedThisActivity.getStringExtra("imageUri");
 
-            new ImageServiceTask().execute(imagePosterUrl);
+            new ImageServiceTask().execute(imagePosterURI);
         }
     }
 
-        private class ImageServiceTask extends AsyncTask<String,Void,Bitmap>{
+    /**
+     * This class is an AsysncTask that is used just for download the image. This helps
+     * the application because it will avoid freeze the app for network stuff.
+     */
+    private class ImageServiceTask extends AsyncTask<String,Void,Bitmap>{
 
             @Override
             protected Bitmap doInBackground(String... params) {
