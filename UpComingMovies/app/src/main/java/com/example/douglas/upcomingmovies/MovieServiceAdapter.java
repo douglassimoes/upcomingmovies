@@ -21,7 +21,8 @@ import java.util.List;
 
 public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapter.MovieServiceViewHolder> {
 
-    private String[] mMovieData;
+    private List<Movie> mMovieData;
+    private OnBottomReachedListener onBottomReachedListener;
 
     @Override
     public MovieServiceAdapter.MovieServiceViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -36,14 +37,18 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
 
     @Override
     public void onBindViewHolder(MovieServiceAdapter.MovieServiceViewHolder movieViewHolder, int position) {
-        String dataForThisMovie = mMovieData[position];
-        movieViewHolder.mMovieServiceTextView.setText(dataForThisMovie);
+        Movie dataForThisMovie = mMovieData.get(position);
+        movieViewHolder.mMovieServiceTextView.setText(dataForThisMovie.toString());
+
+        if(position == mMovieData.size() -1 ){
+            onBottomReachedListener.onBottomReached(position);
+        }
     }
 
     @Override
     public int getItemCount() {
         if (null == mMovieData) return 0;
-        return mMovieData.length;
+        return mMovieData.size();
     }
 
     public class MovieServiceViewHolder extends RecyclerView.ViewHolder {
@@ -55,12 +60,8 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
         }
     }
 
-    public void setMovieData(String jsonMovieData) {
-        try {
-            mMovieData = toStringArray(new JSONObject(jsonMovieData).getJSONArray("results"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public void setMovieData(List<Movie> movieData) {
+        mMovieData = movieData;
         notifyDataSetChanged();
     }
 
@@ -73,5 +74,15 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
             newArray[i]=array.optString(i);
         }
         return newArray;
+    }
+
+    public interface OnBottomReachedListener {
+
+        void onBottomReached(int position);
+    }
+
+    public void setOnBottomReachedListener(OnBottomReachedListener onBottomReachedListener){
+
+        this.onBottomReachedListener = onBottomReachedListener;
     }
 }

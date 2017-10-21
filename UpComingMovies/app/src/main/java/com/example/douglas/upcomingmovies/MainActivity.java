@@ -10,17 +10,25 @@ import android.view.View;
 import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
 
+import com.example.douglas.upcomingmovies.model.Movie;
+import com.example.douglas.upcomingmovies.utilities.JsonHandler;
 import com.example.douglas.upcomingmovies.utilities.NetworkUtils;
 
-import org.w3c.dom.Text;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private TextView mErrorMessageDisplay;
     private MovieServiceAdapter mMovieServiceAdapter;
+    private int lastPageRequested=1;
+    private final int MAX_PAGES=10;
+    private List<Movie> fetchedMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,29 +45,48 @@ public class MainActivity extends AppCompatActivity {
 
         mMovieServiceAdapter = new MovieServiceAdapter();
 
+        mMovieServiceAdapter.setOnBottomReachedListener(new MovieServiceAdapter.OnBottomReachedListener() {
+            @Override
+            public void onBottomReached(int position) {
+                if(lastPageRequested < MAX_PAGES) {
+                    lastPageRequested+=1;
+                    loadMovieData();
+                }
+            }
+        });
+
         mRecyclerView.setAdapter(mMovieServiceAdapter);
 
         loadMovieData();
     }
 
-    private void makeMovieServiceQuery(){
-        URL movieServiceURL = NetworkUtils.buildUrl();
-        new UpComingMovieServiceTask().execute(movieServiceURL);
-
-    }
-
-    public class UpComingMovieServiceTask extends AsyncTask<URL,Void,String>{
+    public class UpComingMovieServiceTask extends AsyncTask<URL,Void,List<Movie>>{
         @Override
-        protected String doInBackground(URL... urls) {
-            URL moviesUrl = urls[0];
+        protected List<Movie> doInBackground(URL... urls) {
+            URL searchUrl = urls[0];
             String movieServiceResults = null;
 
-            movieServiceResults = NetworkUtils.getResponseFromHttpUrl(moviesUrl);
-            return movieServiceResults;
+            try {
+                movieServiceResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                JSONObject jsonResult = new JSONObject(movieServiceResults);
+                JsonHandler jsonHandler = new JsonHandler();
+                if(fetchedMovies == null){
+                    fetchedMovies = jsonHandler.readResultsArray(jsonResult.getJSONArray("results"));
+                }else{
+                    List<Movie> newResult = jsonHandler.readResultsArray(jsonResult.getJSONArray("results"));
+                    fetchedMovies.addAll(newResult);
+                }
+                return fetchedMovies;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
         @Override
-        protected void onPostExecute(String movieServiceResults) {
+        protected void onPostExecute(List<Movie> movieServiceResults) {
             if(movieServiceResults != null && !movieServiceResults.equals("")){
                 showMovieView();
 
