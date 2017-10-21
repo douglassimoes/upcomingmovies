@@ -96,6 +96,9 @@ public class Movie {
 
     private String getGenreString(JSONArray genreIds) {
         String[] genreIdsArray = toStringArray(genreIds);
+        if(genreIds.length() == 0){
+            return "No Genre";
+        }
         switch (Integer.valueOf(genreIdsArray[0])){
             case 28:
                 return "Action";
@@ -136,7 +139,7 @@ public class Movie {
             case 37:
                 return "Western";
             default:
-                return "NoGenre";
+                return "No Genre";
         }
     }
 
