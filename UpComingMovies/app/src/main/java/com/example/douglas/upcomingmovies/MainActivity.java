@@ -1,10 +1,12 @@
 package com.example.douglas.upcomingmovies;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     getPosterImage(fetchedMovies);
                 }else{
                     List<Movie> newResult = jsonHandler.readResultsArray(jsonResult.getJSONArray("results"));
+                    getPosterImage(newResult);
                     fetchedMovies.addAll(newResult);
                 }
                 return fetchedMovies;
@@ -90,10 +94,19 @@ public class MainActivity extends AppCompatActivity {
         public List<Movie> getPosterImage(List<Movie> fetchedMovies){
             URL imageUrl = null;
             Bitmap movieImageBitmap = null;
+            String posterPath=null;
+            Log.i("movies","getPoster");
             for (Movie fetchedMovie:fetchedMovies) {
-                imageUrl = NetworkUtils.buildImgUrl(fetchedMovie.getPosterPath());
-                movieImageBitmap = NetworkUtils.getImageResponseFromHttpUrl(imageUrl);
-                fetchedMovie.setImage(movieImageBitmap);
+                posterPath = fetchedMovie.getPosterPath();
+                if(posterPath == "" || posterPath == null){
+                    InputStream imageNotAvailable = getResources().openRawResource(R.raw.not_available);
+                    movieImageBitmap = BitmapFactory.decodeStream(imageNotAvailable);
+                    fetchedMovie.setImage(movieImageBitmap);
+                }else{
+                    imageUrl = NetworkUtils.buildImgUrl(posterPath);
+                    movieImageBitmap = NetworkUtils.getImageResponseFromHttpUrl(imageUrl);
+                    fetchedMovie.setImage(movieImageBitmap);
+                }
             }
             return fetchedMovies;
         }

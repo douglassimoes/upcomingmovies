@@ -25,7 +25,7 @@ public class JsonHandler {
             try {
                 JSONObject movieInfo = resultsArray.getJSONObject(i);
                 long id = movieInfo.getLong("id");
-                String posterPath = movieInfo.getString("poster_path");
+                String posterPath = getPosterPath(movieInfo);
                 String title = movieInfo.getString("title");
                 String genreIds = movieInfo.getString("genre_ids");
                 String releaseDate = movieInfo.getString("release_date");
@@ -37,5 +37,14 @@ public class JsonHandler {
         Log.i("movies",results.toString());
 
         return results;
+    }
+    public String getPosterPath(JSONObject movieInfo) throws JSONException {
+        String poster_path = movieInfo.getString("poster_path");
+        if(poster_path == "null"){
+            return "";
+        }else{
+            return poster_path;
+        }
+
     }
 }
