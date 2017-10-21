@@ -3,9 +3,12 @@ package com.example.douglas.upcomingmovies;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.support.v7.widget.RecyclerView;
 
 import com.example.douglas.upcomingmovies.utilities.NetworkUtils;
 
@@ -15,14 +18,28 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mApiResultTextView;
+    private RecyclerView mRecyclerView;
+    private TextView mErrorMessageDisplay;
+    private MovieServiceAdapter mMovieServiceAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mApiResultTextView = (TextView) findViewById(R.id.tv_api_result);
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv_movieservice);
+        mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        mRecyclerView.setHasFixedSize(true);
+
+        mMovieServiceAdapter = new MovieServiceAdapter();
+
+        mRecyclerView.setAdapter(mMovieServiceAdapter);
+
+        loadMovieData();
     }
 
     private void makeMovieServiceQuery(){
@@ -44,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String movieServiceResults) {
             if(movieServiceResults != null && !movieServiceResults.equals("")){
-                mApiResultTextView.setText(movieServiceResults);
+                showMovieView();
+
+                mMovieServiceAdapter.setMovieData(movieServiceResults);
             }
         }
     }
@@ -60,10 +79,24 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == R.id.action_search){
-            makeMovieServiceQuery();
+            mMovieServiceAdapter.setMovieData(null);
+            loadMovieData();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void loadMovieData() {
+        showMovieView();
+        URL movieServiceURL = NetworkUtils.buildUrl();
+        new UpComingMovieServiceTask().execute(movieServiceURL);
+    }
+
+    private void showMovieView() {
+        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+
 }
