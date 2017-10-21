@@ -1,8 +1,11 @@
 package com.example.douglas.upcomingmovies;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -95,17 +98,21 @@ public class MainActivity extends AppCompatActivity {
             URL imageUrl = null;
             Bitmap movieImageBitmap = null;
             String posterPath=null;
-            Log.i("movies","getPoster");
+            Resources res = getResources();
             for (Movie fetchedMovie:fetchedMovies) {
                 posterPath = fetchedMovie.getPosterPath();
                 if(posterPath == "" || posterPath == null){
-                    InputStream imageNotAvailable = getResources().openRawResource(R.raw.not_available);
+                    InputStream imageNotAvailable = res.openRawResource(R.raw.not_available);
                     movieImageBitmap = BitmapFactory.decodeStream(imageNotAvailable);
-                    fetchedMovie.setImage(movieImageBitmap);
+                    RoundedBitmapDrawable roundedImage = RoundedBitmapDrawableFactory.create(res, movieImageBitmap);
+                    roundedImage.setCornerRadius(Math.max(movieImageBitmap.getWidth(), movieImageBitmap.getHeight()) / 0.1f);
+                    fetchedMovie.setImage(roundedImage);
                 }else{
                     imageUrl = NetworkUtils.buildImgUrl(posterPath);
                     movieImageBitmap = NetworkUtils.getImageResponseFromHttpUrl(imageUrl);
-                    fetchedMovie.setImage(movieImageBitmap);
+                    RoundedBitmapDrawable roundedImage = RoundedBitmapDrawableFactory.create(res, movieImageBitmap);
+                    roundedImage.setCornerRadius(Math.max(movieImageBitmap.getWidth(), movieImageBitmap.getHeight()) / 0.1f);
+                    fetchedMovie.setImage(roundedImage);
                 }
             }
             return fetchedMovies;

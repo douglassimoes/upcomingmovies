@@ -37,7 +37,7 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
     public void onBindViewHolder(MovieServiceAdapter.MovieServiceViewHolder movieViewHolder, int position) {
         Movie dataForThisMovie = mMovieData.get(position);
         movieViewHolder.mMovieServiceTextView.setText(dataForThisMovie.toString());
-        movieViewHolder.mMovieServiceImageView.setImageBitmap(dataForThisMovie.getImage());
+        movieViewHolder.mMovieServiceImageView.setImageDrawable(dataForThisMovie.getImage());
         if(position == mMovieData.size() -1 ){
             onBottomReachedListener.onBottomReached(position);
         }
@@ -60,18 +60,20 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
             mMovieServiceTextView = (TextView) view.findViewById(R.id.tv_movie_service);
             mMovieServiceImageView = (AppCompatImageView) view.findViewById(R.id.iv_movie);
             mMovieServiceTextView.setOnClickListener(this);
+            mMovieServiceImageView.setOnClickListener(this);
             context = view.getContext();
 
         }
 
         @Override
         public void onClick(View v) {
-            mMovieData.get(this.getAdapterPosition());
+            Movie movie = mMovieData.get(this.getAdapterPosition());
             Class movieActivityClass = MovieActivity.class;
             Intent movieActivityIntent = new Intent(context,movieActivityClass);
 
-            movieActivityIntent.putExtra(Intent.EXTRA_TEXT, mMovieServiceTextView.getText());
-
+            movieActivityIntent.putExtra(Intent.EXTRA_TEXT, movie.getFullDescrition());
+            movieActivityIntent.putExtra("imageUri", movie.getPosterPath());
+            movieActivityIntent.setType("image/jpeg");
             context.startActivity(movieActivityIntent);
         }
     }

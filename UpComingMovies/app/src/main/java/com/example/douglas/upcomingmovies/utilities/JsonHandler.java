@@ -27,9 +27,10 @@ public class JsonHandler {
                 long id = movieInfo.getLong("id");
                 String posterPath = getPosterPath(movieInfo);
                 String title = movieInfo.getString("title");
-                String genreIds = movieInfo.getString("genre_ids");
+                String overview = movieInfo.getString("overview");
+                JSONArray genreIds = movieInfo.getJSONArray("genre_ids");
                 String releaseDate = movieInfo.getString("release_date");
-                results.add(new Movie(id,title,genreIds,releaseDate,posterPath));
+                results.add(new Movie(id,title,genreIds,releaseDate,posterPath,overview));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
