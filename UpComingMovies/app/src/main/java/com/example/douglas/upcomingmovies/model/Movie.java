@@ -1,5 +1,7 @@
 package com.example.douglas.upcomingmovies.model;
 
+import android.graphics.Bitmap;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ public class Movie {
     public String genreIds;
     public String releaseDate;
     public String posterPath;
+    public Bitmap image;
 
     public Movie(long id, String title, String genreIds, String releaseDate, String posterPath){
         this.id = id;
@@ -38,6 +41,8 @@ public class Movie {
         return releaseDate;
     }
 
+    public Bitmap getImage(){ return image;}
+
     public String getPosterPath() {
         return posterPath;
     }
@@ -51,5 +56,9 @@ public class Movie {
         dictionary.put("genre_ids", String.valueOf(this.genreIds));
         dictionary.put("release_date", this.releaseDate);
         return dictionary.toString();
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 }

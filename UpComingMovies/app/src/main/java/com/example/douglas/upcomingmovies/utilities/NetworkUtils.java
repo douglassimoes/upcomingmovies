@@ -19,7 +19,7 @@ import java.net.URL;
 
 public class NetworkUtils {
     final static String UP_COMMING_MOVIES_BASE_URL = "https://api.themoviedb.org/3/movie/upcoming";
-    final static String MOVIES_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185//";
+    final static String MOVIES_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185/";
     final static String API_KEY = "1f54bd990f1cdfb230adb312546d765d";
 
     final static String PARAM_API_KEY = "api_key";
@@ -44,9 +44,7 @@ public class NetworkUtils {
     }
 
     public static URL buildImgUrl(String posterPath) {
-        Uri builtUri = Uri.parse(MOVIES_IMAGE_BASE_URL).buildUpon()
-                .appendPath(posterPath)
-                .build();
+        Uri builtUri = Uri.parse(MOVIES_IMAGE_BASE_URL+posterPath);
 
         URL url = null;
         try {

@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
             for (Movie fetchedMovie:fetchedMovies) {
                 imageUrl = NetworkUtils.buildImgUrl(fetchedMovie.getPosterPath());
                 movieImageBitmap = NetworkUtils.getImageResponseFromHttpUrl(imageUrl);
+                fetchedMovie.setImage(movieImageBitmap);
             }
             return fetchedMovies;
         }

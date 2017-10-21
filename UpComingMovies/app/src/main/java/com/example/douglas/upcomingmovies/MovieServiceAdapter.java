@@ -2,6 +2,7 @@ package com.example.douglas.upcomingmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,7 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
     public void onBindViewHolder(MovieServiceAdapter.MovieServiceViewHolder movieViewHolder, int position) {
         Movie dataForThisMovie = mMovieData.get(position);
         movieViewHolder.mMovieServiceTextView.setText(dataForThisMovie.toString());
-
+        movieViewHolder.mMovieServiceImageView.setImageBitmap(dataForThisMovie.getImage());
         if(position == mMovieData.size() -1 ){
             onBottomReachedListener.onBottomReached(position);
         }
@@ -52,12 +53,15 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
         public int position;
         private Context context;
         public final TextView mMovieServiceTextView;
+        public final AppCompatImageView mMovieServiceImageView;
 
         public MovieServiceViewHolder(View view) {
             super(view);
             mMovieServiceTextView = (TextView) view.findViewById(R.id.tv_movie_service);
+            mMovieServiceImageView = (AppCompatImageView) view.findViewById(R.id.iv_movie);
             mMovieServiceTextView.setOnClickListener(this);
             context = view.getContext();
+
         }
 
         @Override
