@@ -1,6 +1,7 @@
 package com.example.douglas.upcomingmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.douglas.upcomingmovies.model.Movie;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -51,29 +48,33 @@ public class MovieServiceAdapter extends RecyclerView.Adapter<MovieServiceAdapte
         return mMovieData.size();
     }
 
-    public class MovieServiceViewHolder extends RecyclerView.ViewHolder {
+    public class MovieServiceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public int position;
+        private Context context;
         public final TextView mMovieServiceTextView;
 
         public MovieServiceViewHolder(View view) {
             super(view);
             mMovieServiceTextView = (TextView) view.findViewById(R.id.tv_movie_service);
+            mMovieServiceTextView.setOnClickListener(this);
+            context = view.getContext();
+        }
+
+        @Override
+        public void onClick(View v) {
+            mMovieData.get(this.getAdapterPosition());
+            Class movieActivityClass = MovieActivity.class;
+            Intent movieActivityIntent = new Intent(context,movieActivityClass);
+
+            movieActivityIntent.putExtra(Intent.EXTRA_TEXT, mMovieServiceTextView.getText());
+
+            context.startActivity(movieActivityIntent);
         }
     }
 
     public void setMovieData(List<Movie> movieData) {
         mMovieData = movieData;
         notifyDataSetChanged();
-    }
-
-    public static String[] toStringArray(JSONArray array) {
-
-        if(array==null)
-            return null;
-        String[] newArray=new String[array.length()];
-        for(int i=0; i<newArray.length; i++) {
-            newArray[i]=array.optString(i);
-        }
-        return newArray;
     }
 
     public interface OnBottomReachedListener {

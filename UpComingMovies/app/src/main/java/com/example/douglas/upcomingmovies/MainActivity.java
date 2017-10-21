@@ -1,5 +1,6 @@
 package com.example.douglas.upcomingmovies;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 JsonHandler jsonHandler = new JsonHandler();
                 if(fetchedMovies == null){
                     fetchedMovies = jsonHandler.readResultsArray(jsonResult.getJSONArray("results"));
+                    getPosterImage(fetchedMovies);
                 }else{
                     List<Movie> newResult = jsonHandler.readResultsArray(jsonResult.getJSONArray("results"));
                     fetchedMovies.addAll(newResult);
@@ -85,6 +87,15 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+        public List<Movie> getPosterImage(List<Movie> fetchedMovies){
+            URL imageUrl = null;
+            Bitmap movieImageBitmap = null;
+            for (Movie fetchedMovie:fetchedMovies) {
+                imageUrl = NetworkUtils.buildImgUrl(fetchedMovie.getPosterPath());
+                movieImageBitmap = NetworkUtils.getImageResponseFromHttpUrl(imageUrl);
+            }
+            return fetchedMovies;
+        }
         @Override
         protected void onPostExecute(List<Movie> movieServiceResults) {
             if(movieServiceResults != null && !movieServiceResults.equals("")){
@@ -116,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadMovieData() {
         showMovieView();
-        URL movieServiceURL = NetworkUtils.buildUrl();
+        URL movieServiceURL = NetworkUtils.buildUrl(String.valueOf(this.lastPageRequested));
         new UpComingMovieServiceTask().execute(movieServiceURL);
     }
 
