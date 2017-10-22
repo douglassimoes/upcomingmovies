@@ -2,13 +2,15 @@
 It is an Android App that shows the list of upcoming movies and gives the user more information about them.
 
 # To run this app
-If you have AndroidStudio installed in your machine you just need to import the UpComingMovies folder
-and you press the Run button.
+If you have AndroidStudio installed in your machine, you just need to import the UpComingMovies folder
+and press the Run button.
 
-- If you had trouble with internet connection in Windows you could try to run this code below:
+- If you had trouble with emulator internet connection(in Windows) you could try to run this code below:
 ```
-Android\sdk\emulator\emulator.exe -avd Nexus_5_API_25 -dns-server 8.8.8.8
+{your_android_sdk_folder}\emulator\emulator.exe -avd {name_of_your_emulator} -dns-server 8.8.8.8
 ```
-
-![These are the screenshots of app runing](screenshots/Screenshot_1508628352.jpg)
-![](screenshots/Screenshot_1508628494.jpg)
+# Tests
+The UIInteraction test is a test created with [espresso](https://developer.android.com/training/testing/ui-testing/espresso-testing.html). You can run the test just right clicking in AndroidStudio Project tab and selecting Run UIInteractionTest.
+# These are the screenshots of the app running
+* [First one](https://github.com/douglassimoes/upcomingmovies/blob/development/screenshots/Screenshot_1508628352.png)
+* [Second one](https://github.com/douglassimoes/upcomingmovies/blob/development/screenshots/Screenshot_1508628494.png)
