@@ -11,6 +11,10 @@ and press the Run button.
 ```
 # Tests
 The UIInteraction test is a test created with [espresso](https://developer.android.com/training/testing/ui-testing/espresso-testing.html). You can run the test just right clicking in AndroidStudio Project tab and selecting Run UIInteractionTest.
-# These are the screenshots of the app running
-* [First one](https://github.com/douglassimoes/upcomingmovies/blob/development/screenshots/Screenshot_1508628352.png)
-* [Second one](https://github.com/douglassimoes/upcomingmovies/blob/development/screenshots/Screenshot_1508628494.png)
+# Results
+There are two views for this application:
+The first one showing all the up comming movies:  
+<img src="screenshots/Screenshot_1508628352.png" alt="drawing" height="480" width="260"/>
+
+The second one when you select one of the movies to see more information:  
+<img src="screenshots/Screenshot_1508628494.png" alt="drawing" height="480" width="260"/>
